@@ -16,7 +16,6 @@ class RegExPattern(object):
                 set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i+1)
                 requirement = RegExPattern(pattern[i+1:set_end])
             elif pattern[i] == "[" or pattern[i] == ".":
-
                 if pattern[i] == ".":
                     requirement = [hex(i)[2:] for i in range(256)]
                 else:

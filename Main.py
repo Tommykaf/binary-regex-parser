@@ -1,6 +1,6 @@
 from RegExPattern import RegExPattern
 from RegExMatcher import RegExMatcher
-import time
+
 def read_from_file(path, readbuffer = 2**20, buffer_size = 2**13):
     with open(path, "rb") as fl:
         for chunk in iter(lambda: fl.read(readbuffer), b''):

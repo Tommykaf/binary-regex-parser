@@ -1,5 +1,5 @@
 from RegExPattern import RegExPattern, RegExModifiers
-import time
+
 class RegExMatcher(object):
     
     def __init__(self, regex_pattern, start_index):
