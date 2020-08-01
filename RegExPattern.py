@@ -5,6 +5,7 @@ class RegExPattern(object):
     def __init__(self, pattern, name = None):
         self.name = name
         self.pattern = []
+        self.last_non_forcing_index = 0
         i = 0
         while i < len(pattern):
             set_end = 0
@@ -36,6 +37,8 @@ class RegExPattern(object):
                 elif pattern[modifier_index] == RegExModifiers.PLUS.value:
                     self.pattern.append((RegExModifiers.NONE, requirement))
                     self.pattern.append((RegExModifiers.STAR, requirement))
+                
+                self.last_non_forcing_index = len(self.pattern) - 1
             else:
                 i = modifier_index
                 self.pattern.append((RegExModifiers.NONE, requirement))
