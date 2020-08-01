@@ -40,6 +40,8 @@ class RegExPattern(object):
                 i = modifier_index
                 self.pattern.append((RegExModifiers.NONE, requirement))
 
+    def __len__(self):
+        return len(self.pattern)
 
 
 
