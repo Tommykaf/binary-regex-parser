@@ -12,7 +12,7 @@ class RegExPattern(object):
             requirement = None
             if pattern[i] == "(":
                 set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i+1)
-                requirement = RegExPattern(pattern[i+1:set_end])
+                requirement = RegExPattern(pattern[i+1:set_end]).pattern
             elif pattern[i] == "[":
                 set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
                 if pattern[i+1] == "^":
