@@ -39,8 +39,6 @@ class RegExPattern(object):
 
                     if pattern[i+1] == "^":
                         requirement = [elem for elem in RegExPattern.possible_values if elem not in requirement]
-
-                        
             else:
                 requirement = [int(pattern[i:i+2], 16)]
 
@@ -65,6 +63,17 @@ class RegExPattern(object):
                     self.pattern.append((RegExModifiers.NONE, requirement))
                     self.last_non_forcing_index = len(self.pattern) - 1
                     self.pattern.append((RegExModifiers.STAR, requirement))
+                elif pattern[modifier_index] == RegExModifiers.CURLY_BRACKETS.value:
+                    bracket_end = find_closing_bracket(BracketKinds.CURLY_BRACKETS, pattern, i+1)
+                    comma_index = pattern.find(",",i+1,bracket_end)
+                    minimum = int(pattern[modifier_index+1:comma_index])
+                    maximum = int(pattern[comma_index+1:bracket_end])
+                    for _ in range(minimum):
+                        self.pattern.append((RegExModifiers.NONE, requirement))
+                    self.last_non_forcing_index = len(self.pattern) - 1
+                    for _ in range(minimum, maximum):
+                        self.pattern.append((RegExModifiers.QMARK, requirement))
+                    i = bracket_end + 1
                 
             else:
                 i = modifier_index
@@ -83,6 +92,7 @@ class RegExModifiers(Enum):
     STAR = "*"
     QMARK = "?"
     PLUS = "+"
+    CURLY_BRACKETS = "{"
     NONE = None
 
     def get_opening_bracket(self):
@@ -94,12 +104,12 @@ class RegExModifiers(Enum):
     
     @staticmethod
     def getModifiers():
-        return ["*","?","+"]
+        return ["*","?","+","{"]
 
 
 if __name__ == "__main__":
     assert(RegExPattern("AA", "lol").pattern == [(RegExModifiers.NONE, [int("AA",16)])])
-    print(RegExPattern("[^AABB]", "lol").pattern)
+    assert(RegExPattern("AA{2,4}", "lol").pattern == [(RegExModifiers.NONE, [int("AA",16)]),(RegExModifiers.NONE, [int("AA",16)]),(RegExModifiers.QMARK, [int("AA",16)]),(RegExModifiers.QMARK, [int("AA",16)])])
     assert(RegExPattern("AABB", "lol").pattern == [(RegExModifiers.NONE, [int("AA",16)]),(RegExModifiers.NONE, [int("BB",16)])])
     assert(RegExPattern("AA*BB", "lol").pattern == [(RegExModifiers.STAR, [int("AA",16)]),(RegExModifiers.NONE, [int("BB",16)])])
     assert(RegExPattern("AA?BB", "lol").pattern == [(RegExModifiers.QMARK, [int("AA",16)]),(RegExModifiers.NONE, [int("BB",16)])])

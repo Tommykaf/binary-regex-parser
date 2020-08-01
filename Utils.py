@@ -22,6 +22,7 @@ def find_closing_bracket(bracket_kind, string, start_index):
 class BracketKinds(Enum):
     PARENTHESES = ("(",")")
     BRACKETS = ("[","]")
+    CURLY_BRACKETS = ("{","}")
 
     def get_opening_bracket(self):
         return self.value[0]
