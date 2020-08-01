@@ -58,8 +58,8 @@ class RegExMatcher(object):
         current_modifier = self.regex_pattern.pattern[self.pattern_index][0]
         current_requirement = self.regex_pattern.pattern[self.pattern_index][1]
         
-        if (type(current_requirement) is int):
-            if (nextByte == current_requirement):
+        if (type(current_requirement) is list):
+            if (nextByte in current_requirement):
                 self.length += 1
                 if (current_modifier != RegExModifiers.STAR):
                     self._advance()
