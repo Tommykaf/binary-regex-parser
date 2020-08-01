@@ -22,7 +22,11 @@ class RegExPattern(object):
                     requirement = RegExPattern.possible_values
                 else:
                     set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
-                    j = i + 2
+                    
+                    j = i + 1
+                    if pattern[i+1] == "^":
+                        j = i + 2
+                    
                     while j < set_end:
                         if pattern[j+2] == "-":
                             for byte in range(int(pattern[j-2 : j],16), \
