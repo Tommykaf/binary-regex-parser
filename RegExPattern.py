@@ -2,7 +2,7 @@ from Utils import find_closing_bracket, BracketKinds
 from enum import Enum, unique
 
 class RegExPattern(object):
-    def __init__(self, pattern, name=None):
+    def __init__(self, pattern, name = None):
         self.name = name
         self.pattern = []
         i = 0
@@ -12,7 +12,7 @@ class RegExPattern(object):
             requirement = None
             if pattern[i] == "(":
                 set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i+1)
-                requirement = RegExPattern(pattern[i+1:set_end]).pattern
+                requirement = RegExPattern(pattern[i+1:set_end])
             elif pattern[i] == "[":
                 set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
                 if pattern[i+1] == "^":
