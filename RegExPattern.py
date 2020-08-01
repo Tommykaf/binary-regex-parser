@@ -36,12 +36,13 @@ class RegExPattern(object):
                     self.pattern.append((RegExModifiers.QMARK, requirement))
                 elif pattern[modifier_index] == RegExModifiers.PLUS.value:
                     self.pattern.append((RegExModifiers.NONE, requirement))
+                    self.last_non_forcing_index = len(self.pattern) - 1
                     self.pattern.append((RegExModifiers.STAR, requirement))
                 
-                self.last_non_forcing_index = len(self.pattern) - 1
             else:
                 i = modifier_index
                 self.pattern.append((RegExModifiers.NONE, requirement))
+                self.last_non_forcing_index = len(self.pattern) - 1
 
     def __len__(self):
         return len(self.pattern)
