@@ -24,6 +24,15 @@ class RegExMatcher(object):
             self.is_done = self.is_done or self.pattern_index >= len(self.regex_pattern.pattern)
         return self.is_done
 
+    def info(self):
+        return {
+            "length": self.length,
+            "name": self.regex_pattern.name,
+            "indices": {
+                "start": self.start_index,
+                "end": self.start_index + self.length
+            }
+        }
 
     def _advance(self):
         if (self.pattern_index + 1 >= len(self.regex_pattern.pattern)):

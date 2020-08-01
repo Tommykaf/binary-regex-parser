@@ -6,6 +6,7 @@ class RegExPattern(object):
         self.name = name
         self.pattern = []
         self.last_non_forcing_index = 0
+        self.initiators = None
         i = 0
         while i < len(pattern):
             set_end = 0
@@ -14,14 +15,26 @@ class RegExPattern(object):
             if pattern[i] == "(":
                 set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i+1)
                 requirement = RegExPattern(pattern[i+1:set_end])
-            elif pattern[i] == "[":
-                set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
-                if pattern[i+1] == "^":
-                    pass #Next token is a negated set
+            elif pattern[i] == "[" or pattern[i] == ".":
+
+                if pattern[i] == ".":
+                    requirement = [hex(i)[2:] for i in range(256)]
                 else:
-                    pass #Next token is a normal set
+                    set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
+                    if pattern[i+1] == "^":
+                        pass #Next token is a negated set
+                    else:
+                        pass #Next token is a normal set
             else:
                 requirement = int(pattern[i:i+2], 16)
+
+            if (self.initiators == None):
+                if (type(requirement) is RegExPattern):
+                    self.initiators = requirement.initiators
+                elif (type(requirement) is int):
+                    self.initiators = [requirement]
+                elif (type(requirement) is list):
+                    self.initiators = [requirement]
 
             if set_end != 0:
                 modifier_index = set_end + 1
