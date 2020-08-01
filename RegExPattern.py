@@ -67,4 +67,9 @@ class RegExModifiers(Enum):
 
 
 if __name__ == "__main__":
-    print(RegExPattern("AA(AA+)", "lol").pattern)
+    assert(RegExPattern("AA", "lol").pattern == [(RegExModifiers.NONE, int("AA",16))])
+    assert(RegExPattern("AABB", "lol").pattern == [(RegExModifiers.NONE, int("AA",16)),(RegExModifiers.NONE, int("BB",16))])
+    assert(RegExPattern("AA*BB", "lol").pattern == [(RegExModifiers.STAR, int("AA",16)),(RegExModifiers.NONE, int("BB",16))])
+    assert(RegExPattern("AA?BB", "lol").pattern == [(RegExModifiers.QMARK, int("AA",16)),(RegExModifiers.NONE, int("BB",16))])
+    assert(RegExPattern("AA+BB", "lol").pattern == [(RegExModifiers.NONE, int("AA",16)),(RegExModifiers.STAR, int("AA",16)),(RegExModifiers.NONE, int("BB",16))])
+    assert(RegExPattern("AA(AA+)", "lol").pattern  == [(RegExModifiers.NONE, int("AA",16)),(RegExModifiers.NONE,[(RegExModifiers.NONE, int("AA",16)),(RegExModifiers.STAR, int("AA",16))])])
