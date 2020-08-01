@@ -1,11 +1,10 @@
 from RegExPattern import RegExPattern, RegExModifiers
-
+import time
 class RegExMatcher(object):
     
-    def __init__(self, regex_pattern, start_index, base = 16):
+    def __init__(self, regex_pattern, start_index):
         self.regex_pattern = regex_pattern
         self.start_index = start_index
-        self.base = base
         self._valid = True
         self.is_done = False
         self.pattern_index = 0
@@ -50,13 +49,11 @@ class RegExMatcher(object):
         self.length = 0
 
 
-    def validate(self, nextByte):
+    def validate(self, nextByte, index=0):
         if (self.isDone()):
             return False
 
         nextByteValid = True
-        if (type(nextByte) is str):
-            nextByte = int(nextByte,self.base)
         
         current_modifier = self.regex_pattern.pattern[self.pattern_index][0]
         current_requirement = self.regex_pattern.pattern[self.pattern_index][1]
@@ -97,41 +94,3 @@ class RegExMatcher(object):
                     nextByteValid = False
             
         return nextByteValid
-
-
-if __name__ == "__main__":
-    i = 0
-    initiators = {"AA" :  [RegExPattern("(AA)+", "lol")]}
-    m = []
-    s = "AAAAAABBAAAA"
-    while i < len(s):
-        if (s[i:i+2] in initiators.keys()):
-            for pattern in initiators[s[i:i+2]]:
-                m.append(RegExMatcher(pattern,i))
-        print(i,s[i:i+2], m)
-
-        toDelete = []
-        for matcher in m:
-            matcher.validate(s[i:i+2])
-            if (not matcher.isValid()):
-                toDelete.append(matcher)
-            elif (matcher.isDone()):
-                print("DONE! ", matcher.start_index, matcher.length)
-                toDelete.append(matcher)
-
-        for bruh in toDelete:
-            m.remove(bruh)
-
-        
-        i += 2
-
-    toDelete = []
-    for matcher in m:
-        if (not matcher.isValid()):
-            toDelete.append(matcher)
-        elif (matcher.isDone(cleanup=True)):
-            print("DONE! ", matcher.start_index, matcher.length)
-            toDelete.append(matcher)
-
-    for bruh in toDelete:
-        m.remove(bruh)
