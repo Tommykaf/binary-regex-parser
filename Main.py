@@ -150,12 +150,12 @@ def initialize_parser():
 
 if __name__ == "__main__":
     args = initialize_parser()
-    res = main(args.file,args.map,args.readbuffer,args.buffer)
+    res = json.dumps(main(args.file,args.map,args.readbuffer,args.buffer))
     if args.output == None:
         print(res)
     else:
         output_file = open(args.output,"w")
-        output_file.write(str(res))
+        output_file.write(res)
         output_file.flush()
         output_file.close()
    
