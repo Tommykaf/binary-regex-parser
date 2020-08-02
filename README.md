@@ -1,8 +1,9 @@
-# binary-regex-parser
+# Binary Regex Parser
 
 
 A program to find regex patterns in binary files.
-This soluttion includes:
+
+This solution includes:
 - My own binary regex pattern and binary regex matcher
 - A `Main.py` file for handling tthe program
 - A utilities file
