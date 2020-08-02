@@ -1,7 +1,17 @@
 from RegExPattern import RegExPattern
 from RegExMatcher import RegExMatcher
+import argparse
+import json
 
 def read_from_file(path, readbuffer = 2**20, buffer_size = 2**13):
+    '''
+    A generator used for buffered reading from a file
+    
+    Arguments:
+        path - path to a binary file object open for reading (open(path,"rb"))
+        readbuffer - a buffer for reading from io - should be bigger than buffer
+        buffer - the size of the buffer yielded by the generator
+    '''
     with open(path, "rb") as fl:
         for chunk in iter(lambda: fl.read(readbuffer), b''):
             while chunk != b'':
@@ -15,6 +25,27 @@ def read_from_file(path, readbuffer = 2**20, buffer_size = 2**13):
             
 
 def main(path, regex_map, readbuffer = 2**20, buffer_size = 2**13):
+    '''
+    Find regex expressions in a binary file.
+    
+    Arguments:
+        path - path to a binary file object open for reading (open(path,"rb"))
+        regex_map - a map with binary regex expressions as keys and their names as values
+        readbuffer - a buffer for reading from io - should be bigger than buffer
+        buffer - the size of the buffer yielded by the generator
+    
+    Returns:
+        A list of dictionaries of the following scheme:
+            {
+                length: int,
+                name: string,
+                indices: {
+                    start: int,
+                    end: int
+                }
+            }
+            Each dicttionary represents one occurence of a regex expression
+    '''
 
     res = []
     fl = read_from_file(path, readbuffer, buffer_size)
@@ -97,30 +128,34 @@ def main(path, regex_map, readbuffer = 2**20, buffer_size = 2**13):
     return res
 
     
+def initialize_parser():
+    parser = argparse.ArgumentParser(description='''A program for matching regex expressions in binary files. Usage example:
+            python .\Main.py .\\file_path '{\\\"patttern1\\\": \\\"patttern1_name\\\",\\\"patttern2\\\": \\\"patttern2_name\\\"}' --readbuffer 8192 --buffer 1024''',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('file', metavar='FILENAME',
+                   help='a path to an input file')
+    parser.add_argument('map', metavar='REGEX_MAP', type=json.loads,
+                   help='a map of scheme {{"binary-regex":"regex_name"}}')
 
+    parser.add_argument('--readbuffer', type=int, default=2**20,
+                   help='num of bytes read from tthe file each iteration')
+
+    parser.add_argument('--output', default=None,
+                   help='file to output to')
+
+    parser.add_argument('--buffer', type=int, default=2**13,
+                   help='num of bytes processed each iteration')
+    
+    return parser.parse_args()
 
 if __name__ == "__main__":
-    print(main("./flame-qd1a.190821.007/bootloader-flame-c2f2-0.2-5799621.img", { '5D00008000': 'lzma',
-  '27051956': 'uImage',
-  '18286F01': 'zImage',
-  '1F8B0800': 'gzip',
-  '303730373031': 'cpio',
-  '303730373032': 'cpio',
-  '303730373033': 'cpio',
-  '894C5A4F000D0A1A0A': 'lzo',
-  '5D00000004': 'lzma',
-  'FD377A585A00': 'xz',
-  '314159265359': 'bzip2',
-  '425A6839314159265359': 'bzip2',
-  '04224D18': 'lz4',
-  '02214C18': 'lz4',
-  '1F9E08': 'gzip',
-  '71736873': 'squashfs',
-  '68737173': 'squashfs',
-  '51434454': 'dtb',
-  'D00DFEED': 'fit',
-  '7F454C46': 'elf',
-  "4642504B0100+": "START",
-  "525C":"525C",
-  "[4642504B0100]+": "START++",
-  "4642504B0100{1,3}": "START++"}))
+    args = initialize_parser()
+    res = main(args.file,args.map,args.readbuffer,args.buffer)
+    if args.output == None:
+        print(res)
+    else:
+        output_file = open(args.output,"w")
+        output_file.write(str(res))
+        output_file.flush()
+        output_file.close()
+   
