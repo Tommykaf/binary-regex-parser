@@ -46,6 +46,27 @@ class BracketKinds(Enum):
         return self.value[1]
 
 
+def find_capture_group(string, start_index, end_index, base = 16, possible_values = list(range(256))):
+        i = start_index + 1
+        res = []
+        if string[start_index+1] == "^":
+            i = start_index + 2
+        
+        while i < end_index:
+            if string[i+2] == "-":
+                for byte in range(int(string[i-2 : i],base), \
+                    int(string[i+1 : i+3],base)):
+                    res.append(int(byte,base))
+                i += 5
+            else:
+                res.append(int(string[i:i+2],base))
+                i += 2
+
+        if string[i+1] == "^":
+            res = [elem for elem in possible_values if elem not in res]
+        
+        return res
+
 if __name__ == "__main__":
     assert(find_closing_bracket(BracketKinds.PARENTHESES, "()",0) == 1)
     assert(find_closing_bracket(BracketKinds.PARENTHESES, "((([])))",1) == 6)

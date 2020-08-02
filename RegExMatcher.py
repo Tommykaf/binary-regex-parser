@@ -16,7 +16,7 @@ class RegExMatcher(object):
 
     def isDone(self, cleanup = False):
         if (cleanup):
-            self.is_done = self.is_done or self.pattern_index >= self.regex_pattern.last_non_forcing_index - 1
+            self.is_done = self.is_done or self.pattern_index >= self.regex_pattern.last_forcing_index - 1
             if (self.subpattern_matcher != None):
                 self.length = self.subpattern_matcher.start_index + self.subpattern_matcher.length - self.start_index
         else:
