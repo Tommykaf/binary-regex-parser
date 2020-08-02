@@ -16,7 +16,7 @@ All Regex expressions passed as arguments to the program must be in that format.
 #### Supported Modifiers
 - `XX?` - `XX` doesn't have tto appear, butt can appear once  
 - `XX*` - Matches at least 0 repetitions of `XX`
-- `XX*` - Matches at least 1 repetition of `XX` 
+- `XX+` - Matches at least 1 repetition of `XX` 
 - `XX{a}` - Matches exactly `a` occurrences of `XX` 
 - `XX{a,b}` - Matches between `a` and `b` occurrences of `XX`
 - `.` - Matches any byte
