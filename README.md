@@ -1,15 +1,15 @@
 # binary-regex-parser
 
 
-A program tto find regex patttterns in binary files.
+A program tto find regex patterns in binary files.
 
 ## Usage
 
 ### Binary RegEx Expressions
-The RegEx are binary and in Hexadecimal, this means tthat charactes come in groups of two.
+The RegEx are binary and in Hexadecimal, this means that charactes come in groups of two.
 
 For Example:
-    Unlike in regular RegEx, in the pattern "AA+" tthe "+" character relates to the preceding "AA".
+    Unlike in normal RegEx, in the pattern "AA+" the "+" character relates to the preceding "AA".
 
 All Regex expressions passed as arguments to the program must be in that format.
 
