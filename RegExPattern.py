@@ -15,13 +15,13 @@ class RegExPattern(object):
 
             requirement = []
             if pattern[i] == "(":
-                set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i+1)
+                set_end = find_closing_bracket(BracketKinds.PARENTHESES, pattern, i)
                 requirement = RegExPattern(pattern[i+1:set_end])
             elif pattern[i] == "[" or pattern[i] == ".":
                 if pattern[i] == ".":
                     requirement = RegExPattern.possible_values
                 else:
-                    set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i+1)
+                    set_end = find_closing_bracket(BracketKinds.BRACKETS, pattern, i)
                     
                     j = i + 1
                     if pattern[i+1] == "^":
@@ -64,7 +64,7 @@ class RegExPattern(object):
                     self.last_non_forcing_index = len(self.pattern) - 1
                     self.pattern.append((RegExModifiers.STAR, requirement))
                 elif pattern[modifier_index] == RegExModifiers.CURLY_BRACKETS.value:
-                    bracket_end = find_closing_bracket(BracketKinds.CURLY_BRACKETS, pattern, i+1)
+                    bracket_end = find_closing_bracket(BracketKinds.CURLY_BRACKETS, pattern, i)
                     comma_index = pattern.find(",",i+1,bracket_end)
                     minimum = int(pattern[modifier_index+1:comma_index])
                     maximum = int(pattern[comma_index+1:bracket_end])
